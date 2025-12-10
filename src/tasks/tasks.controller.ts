@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { UpdateTaskStatusDto } from './dto/UpdateTask.dto';
 import { AssignTaskDto } from './dto/AssignTask.dto';
-import {UpdateTaskDeadlineDto} from "./dto/UpdateDeadkine.dto";
+import { UpdateTaskDeadlineDto } from './dto/UpdateDeadkine.dto';
 
 @Controller('tasks')
 export class TasksController {

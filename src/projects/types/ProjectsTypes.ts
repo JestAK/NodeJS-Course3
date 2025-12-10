@@ -4,5 +4,3 @@ export interface Project {
   totalEpisodes: number;
   createdAt: Date;
 }
-
-

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationsService } from './notifications.service';
-import {TasksModule} from "../tasks/tasks.module";
-import {ScheduleModule} from "@nestjs/schedule";
+import { TasksModule } from '../tasks/tasks.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 describe('NotificationsService', () => {
   let service: NotificationsService;
