@@ -1,29 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProjectDto } from './dto/CreateProject.dto';
-import { randomUUID } from 'crypto';
-import { Project } from './types/ProjectsTypes';
+import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class ProjectsService {
-  private projects: Project[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateProjectDto): Project {
-    const project: Project = {
-      id: randomUUID(),
-      title: dto.title,
-      totalEpisodes: dto.totalEpisodes,
-      createdAt: new Date(),
-    };
-
-    this.projects.push(project);
-    return project;
+  async create(dto: CreateProjectDto) {
+    return this.prisma.project.create({
+      data: {
+        title: dto.title,
+        totalEpisodes: dto.totalEpisodes,
+      },
+    });
   }
 
-  findAll(): Project[] {
-    return this.projects;
+  async findAll() {
+    return this.prisma.project.findMany();
   }
 
-  findOne(id: string): Project | undefined {
-    return this.projects.find((project) => project.id === id);
+  async findOne(id: string) {
+    return this.prisma.project.findUnique({
+      where: { id },
+      include: { tasks: true },
+    });
   }
 }
