@@ -3,7 +3,7 @@ import { ProjectsController } from './projects.controller';
 import { TasksModule } from '../tasks/tasks.module';
 import { ProjectsService } from './projects.service';
 import { TasksService } from '../tasks/tasks.service';
-import {PrismaService} from "../prisma.service";
+import { PrismaService } from '../prisma.service';
 
 describe('ProjectsController', () => {
   let controller: ProjectsController;
