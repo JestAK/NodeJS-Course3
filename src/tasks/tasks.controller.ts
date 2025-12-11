@@ -9,22 +9,28 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getAll() {
-    return this.tasksService.getAll();
+  async getAll() {
+    return await this.tasksService.getAll();
   }
 
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body() dto: UpdateTaskStatusDto) {
-    return this.tasksService.updateStatus(id, dto.status);
+  async updateStatus(
+    @Param('id') id: string,
+    @Body() dto: UpdateTaskStatusDto,
+  ) {
+    return await this.tasksService.updateStatus(id, dto.status);
   }
 
   @Patch(':id/deadline')
-  updateDeadline(@Param('id') id: string, @Body() dto: UpdateTaskDeadlineDto) {
-    return this.tasksService.updateDeadline(id, dto.deadline);
+  async updateDeadline(
+    @Param('id') id: string,
+    @Body() dto: UpdateTaskDeadlineDto,
+  ) {
+    return await this.tasksService.updateDeadline(id, dto.deadline);
   }
 
   @Patch(':id/assign')
-  assign(@Param('id') id: string, @Body() dto: AssignTaskDto) {
-    return this.tasksService.assignUser(id, dto.userName);
+  async assign(@Param('id') id: string, @Body() dto: AssignTaskDto) {
+    return await this.tasksService.assignUser(id, dto.userName);
   }
 }

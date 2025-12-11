@@ -23,3 +23,8 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# Prisma Client
+/src/generated/prisma
+/prisma/migrations
+

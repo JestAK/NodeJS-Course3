@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Task, TaskStatus, TaskType } from './types/TasksTypes';
-import { randomUUID } from 'crypto';
+import { TaskStatus, TaskType } from './types/TasksTypes';
+import { PrismaService } from '../prisma.service';
+import { Task } from './types/TasksTypes';
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
+  constructor(private prisma: PrismaService) {}
 
   private readonly processTypes: TaskType[] = [
     'translation',
@@ -16,96 +17,97 @@ export class TasksService {
     'mixing',
   ];
 
-  createInitialTasks(projectId: string, totalEpisodes: number): Task[] {
-    const created: Task[] = [];
+  async createInitialTasks(projectId: string, totalEpisodes: number) {
+    const tasksToCreate: Task[] = [];
 
     for (let ep = 1; ep <= totalEpisodes; ep++) {
       for (const type of this.processTypes) {
-        const task: Task = {
-          id: randomUUID(),
+        tasksToCreate.push({
           projectId,
           episodeNumber: ep,
           type,
-          status: 'todo',
+          status: 'todo' as TaskStatus,
           assignedTo: null,
           deadline: null,
-        };
-        this.tasks.push(task);
-        created.push(task);
+        });
       }
     }
 
-    return created;
+    return this.prisma.task.createMany({
+      data: tasksToCreate,
+    });
   }
 
-  getAll(): Task[] {
-    return this.tasks;
+  async getAll() {
+    return this.prisma.task.findMany();
   }
 
-  findOne(id: string): Task | undefined {
-    return this.tasks.find((task) => task.id === id);
+  async findOne(id: string) {
+    return this.prisma.task.findUnique({
+      where: { id },
+    });
   }
 
-  updateStatus(id: string, status: TaskStatus): Task | undefined {
-    const task = this.findOne(id);
-    if (!task) {
-      return undefined;
-    }
-    task.status = status;
-    return task;
+  async updateStatus(id: string, status: TaskStatus) {
+    return this.prisma.task.update({
+      where: { id },
+      data: { status },
+    });
   }
 
-  updateDeadline(id: string, date: Date): Task | undefined {
-    const task = this.findOne(id);
-    if (!task) {
-      return undefined;
-    }
-    task.deadline = date;
-    return task;
+  async updateDeadline(id: string, date: Date) {
+    return this.prisma.task.update({
+      where: { id },
+      data: { deadline: date },
+    });
   }
 
-  assignUser(id: string, userName: string): Task | undefined {
-    const task = this.findOne(id);
-    if (!task) {
-      return undefined;
-    }
-    task.assignedTo = userName;
-    if (task.status === 'todo') {
-      task.status = 'in_progress';
-    }
-    return task;
+  async assignUser(id: string, userName: string) {
+    const task = await this.findOne(id);
+    if (!task) return undefined;
+
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        assignedTo: userName,
+      },
+    });
   }
 
-  getProjectProgress(projectId: string): number | undefined {
-    const projectTasks = this.tasks.filter(
-      (task) => task.projectId === projectId,
-    );
-    if (projectTasks.length === 0) return undefined;
+  async getProjectProgress(projectId: string) {
+    const [total, completed] = await Promise.all([
+      this.prisma.task.count({ where: { projectId } }),
+      this.prisma.task.count({
+        where: { projectId, status: 'done' },
+      }),
+    ]);
 
-    const completed = projectTasks.filter(
-      (task) => task.status === 'done',
-    ).length;
-    return completed / projectTasks.length;
+    if (total === 0) return undefined;
+    return completed / total;
   }
 
-  getEpisodeProgress(projectId: string, episodeNumber: number): number {
-    const episodeTasks = this.tasks.filter(
-      (task) =>
-        task.projectId === projectId && task.episodeNumber === episodeNumber,
-    );
-    if (episodeTasks.length === 0) return 0;
+  async getEpisodeProgress(projectId: string, episodeNumber: number) {
+    const [total, completed] = await Promise.all([
+      this.prisma.task.count({
+        where: { projectId, episodeNumber },
+      }),
+      this.prisma.task.count({
+        where: { projectId, episodeNumber, status: 'done' },
+      }),
+    ]);
 
-    const completed = episodeTasks.filter(
-      (task) => task.status === 'done',
-    ).length;
-    return completed / episodeTasks.length;
+    if (total === 0) return 0;
+    return completed / total;
   }
 
-  findOverdueTasks(): Task[] {
-    const now: Date = new Date();
-    return this.tasks.filter(
-      (task) =>
-        task.deadline !== null && task.deadline < now && task.status !== 'done',
-    );
+  async findOverdueTasks() {
+    const now = new Date();
+
+    return this.prisma.task.findMany({
+      where: {
+        deadline: { lt: now },
+        status: { not: 'done' },
+      },
+    });
   }
 }
