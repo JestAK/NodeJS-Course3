@@ -35,16 +35,16 @@ export class ProjectsController {
     };
   }
 
-    @Get(':id/episodes/:episodeNumber/progress')
-    getEpisodeProgress(
-      @Param('id') id: string,
-      @Param('episodeNumber') episodeNumber: string,
-    ) {
-      const ep = parseInt(episodeNumber, 10);
-      return {
-        projectId: id,
-        episodeNumber: ep,
-        progress: this.tasksService.getEpisodeProgress(id, ep),
-      };
-    }
+  @Get(':id/episodes/:episodeNumber/progress')
+  getEpisodeProgress(
+    @Param('id') id: string,
+    @Param('episodeNumber') episodeNumber: string,
+  ) {
+    const ep = parseInt(episodeNumber, 10);
+    return {
+      projectId: id,
+      episodeNumber: ep,
+      progress: this.tasksService.getEpisodeProgress(id, ep),
+    };
+  }
 }

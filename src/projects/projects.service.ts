@@ -1,18 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/CreateProject.dto';
-import { PrismaService } from '../prisma.service';
+import {Injectable} from '@nestjs/common';
+import {CreateProjectDto} from './dto/CreateProject.dto';
+import {PrismaService} from '../prisma.service';
+import {Project} from "@prisma/client";
 
 @Injectable()
 export class ProjectsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateProjectDto) {
-    return this.prisma.project.create({
-      data: {
-        title: dto.title,
-        totalEpisodes: dto.totalEpisodes,
-      },
-    });
+  async create(dto: CreateProjectDto): Promise<Project> {
+    return this.prisma.project.create({ data: dto });
   }
 
   async findAll() {
