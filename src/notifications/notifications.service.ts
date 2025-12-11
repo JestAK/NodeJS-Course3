@@ -7,10 +7,10 @@ export class NotificationsService {
   constructor(private readonly tasksService: TasksService) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  checkDeadlines() {
+  async checkDeadlines() {
     console.log('[Scheduler] Checking deadlines...');
 
-    const overdue = this.tasksService.findOverdueTasks();
+    const overdue = await this.tasksService.findOverdueTasks();
 
     if (overdue.length === 0) {
       console.log('[Scheduler] No overdue tasks.');

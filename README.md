@@ -12,6 +12,41 @@ Create useful API to manage processes in fandub projects and tasks. Add, Remove 
 - PrismaORM
 - PostgreSQL
 
+# How to run the project
+
+### 1. Install dependencies
+
+```npm install```
+
+### 2. Start PostgreSQL in Docker
+
+Run PostgreSQL container:
+
+```
+docker run --name <container name> -e POSTGRES_PASSWORD=<password> -e POSTGRES_DB=<db name> -p 5432:5432 -d postgres
+```
+
+### 3. Configure environment variables
+
+Create `.env` file in the root directory with the following content:
+
+```
+DATABASE_URL="postgresql://postgres:<password>@localhost:5432/<db name>?schema=public"
+```
+
+### 4. Run database migrations and generate Prisma Client
+
+```
+npx prisma migrate dev --name init
+npx prisma generate
+```
+
+### 5. Start the application
+
+```npm run start```
+
+
+
 # Components Diagram
 ![Component Diagram](./docs/ComponentsDiagram.png)
 

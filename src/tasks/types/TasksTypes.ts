@@ -10,7 +10,6 @@ export type TaskType =
 export type TaskStatus = 'todo' | 'in_progress' | 'done';
 
 export interface Task {
-  id: string;
   projectId: string;
   episodeNumber: number;
   type: TaskType;

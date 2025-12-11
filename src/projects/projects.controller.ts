@@ -13,7 +13,7 @@ export class ProjectsController {
   @Post()
   async create(@Body() dto: CreateProjectDto) {
     const project = await this.projectsService.create(dto);
-    // this.tasksService.createInitialTasks(project.id, project.totalEpisodes);
+    this.tasksService.createInitialTasks(project.id, project.totalEpisodes);
     return project;
   }
 
@@ -27,24 +27,24 @@ export class ProjectsController {
     return await this.projectsService.findOne(id);
   }
 
-  // @Get(':id/progress')
-  // getProjectProgress(@Param('id') id: string) {
-  //   return {
-  //     projectId: id,
-  //     progress: this.tasksService.getProjectProgress(id),
-  //   };
-  // }
+  @Get(':id/progress')
+  getProjectProgress(@Param('id') id: string) {
+    return {
+      projectId: id,
+      progress: this.tasksService.getProjectProgress(id),
+    };
+  }
 
-  //   @Get(':id/episodes/:episodeNumber/progress')
-  //   getEpisodeProgress(
-  //     @Param('id') id: string,
-  //     @Param('episodeNumber') episodeNumber: string,
-  //   ) {
-  //     const ep = parseInt(episodeNumber, 10);
-  //     return {
-  //       projectId: id,
-  //       episodeNumber: ep,
-  //       progress: this.tasksService.getEpisodeProgress(id, ep),
-  //     };
-  //   }
+    @Get(':id/episodes/:episodeNumber/progress')
+    getEpisodeProgress(
+      @Param('id') id: string,
+      @Param('episodeNumber') episodeNumber: string,
+    ) {
+      const ep = parseInt(episodeNumber, 10);
+      return {
+        projectId: id,
+        episodeNumber: ep,
+        progress: this.tasksService.getEpisodeProgress(id, ep),
+      };
+    }
 }
