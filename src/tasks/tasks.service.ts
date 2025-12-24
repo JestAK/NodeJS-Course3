@@ -39,7 +39,9 @@ export class TasksService {
   }
 
   async getAll() {
-    return this.prisma.task.findMany();
+    return this.prisma.task.findMany({
+      orderBy: { episodeNumber: 'asc' },
+    });
   }
 
   async findOne(id: string) {
