@@ -28,15 +28,15 @@ export class ProjectsController {
   }
 
   @Get(':id/progress')
-  getProjectProgress(@Param('id') id: string) {
+  async getProjectProgress(@Param('id') id: string) {
     return {
       projectId: id,
-      progress: this.tasksService.getProjectProgress(id),
+      progress: await this.tasksService.getProjectProgress(id),
     };
   }
 
   @Get(':id/episodes/:episodeNumber/progress')
-  getEpisodeProgress(
+  async getEpisodeProgress(
     @Param('id') id: string,
     @Param('episodeNumber') episodeNumber: string,
   ) {
@@ -44,7 +44,7 @@ export class ProjectsController {
     return {
       projectId: id,
       episodeNumber: ep,
-      progress: this.tasksService.getEpisodeProgress(id, ep),
+      progress: await this.tasksService.getEpisodeProgress(id, ep),
     };
   }
 }

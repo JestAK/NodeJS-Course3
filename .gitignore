@@ -19,6 +19,7 @@ lerna-debug.log*
 .env.development
 .env.test
 .env.production
+.env.e2e
 
 # temp directory
 .temp
@@ -28,3 +29,6 @@ lerna-debug.log*
 /src/generated/prisma
 /prisma/migrations
 
+
+# stryker temp files
+.stryker-tmp

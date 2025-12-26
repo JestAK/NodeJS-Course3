@@ -100,5 +100,30 @@ npx prisma generate
   - **Episode progress:** `completedTasksForEpisode / totalTasksForEpisode`
 
 
+# Tests 
+## Unit and Integration Tests
+### To run tests:
+You need additional database for testing. Create another PostgreSQL container in Docker or database for tests. And after that, create `.env.test` file in the root directory with `DATABASE_URL` pointing to test database.
+
+Then run:
+
+```npm test```
+
+## E2E Tests
+### To run E2E tests:
+You need additional database for E2E testing. Create another PostgreSQL container in Docker or database for E2E tests. And after that, create `.env.e2e` file in the root directory with `DATABASE_URL` pointing to E2E test database.
+
+Then run:
+
+```npm run test:e2e```
+
+## Mutation Tests
+### Mutation Tests Report:
+[Mutation Tests Report by Stryker](./reports/mutation/mutation.html)
+
+As it seen from the report, the mutation score is 94.12% for the covered tests for Task Service. This indicates a good level of test effectiveness, as a higher mutation score generally reflects better test coverage and quality. But still not 100%, because it mutated some parts of code that are not affects on service work as returning undefined which is possible case if where is no record found in the database.
+
+
+
 #### _Author: Kaliberda Anton Dmytrovych, student of FICT IM-32_
 
