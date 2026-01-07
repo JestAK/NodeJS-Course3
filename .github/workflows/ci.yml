@@ -23,6 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
       - name: Commit linter
         run: npx commitlint --from=HEAD~1 --to=HEAD
 
