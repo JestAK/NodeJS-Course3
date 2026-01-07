@@ -8,15 +8,15 @@ export class ProjectsService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateProjectDto): Promise<Project> {
-    return this.prisma.project.create({ data: dto });
+    return await this.prisma.project.create({ data: dto });
   }
 
   async findAll() {
-    return this.prisma.project.findMany();
+    return await this.prisma.project.findMany();
   }
 
   async findOne(id: string) {
-    return this.prisma.project.findUnique({
+    return await this.prisma.project.findUnique({
       where: { id },
       include: { tasks: true },
     });
