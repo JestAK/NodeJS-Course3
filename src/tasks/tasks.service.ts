@@ -33,32 +33,32 @@ export class TasksService {
       }
     }
 
-    return this.prisma.task.createMany({
+    return await this.prisma.task.createMany({
       data: tasksToCreate,
     });
   }
 
   async getAll() {
-    return this.prisma.task.findMany({
+    return await this.prisma.task.findMany({
       orderBy: { episodeNumber: 'asc' },
     });
   }
 
   async findOne(id: string) {
-    return this.prisma.task.findUnique({
+    return await this.prisma.task.findUnique({
       where: { id },
     });
   }
 
   async updateStatus(id: string, status: TaskStatus) {
-    return this.prisma.task.update({
+    return await this.prisma.task.update({
       where: { id },
       data: { status },
     });
   }
 
   async updateDeadline(id: string, date: Date) {
-    return this.prisma.task.update({
+    return await this.prisma.task.update({
       where: { id },
       data: { deadline: date },
     });
@@ -105,7 +105,7 @@ export class TasksService {
   async findOverdueTasks() {
     const now = new Date();
 
-    return this.prisma.task.findMany({
+    return await this.prisma.task.findMany({
       where: {
         deadline: { lt: now },
         status: { not: 'done' },
