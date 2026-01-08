@@ -25,10 +25,5 @@ lerna-debug.log*
 .temp
 .tmp
 
-# Prisma Client
-/src/generated/prisma
-/prisma/migrations
-
-
 # stryker temp files
 .stryker-tmp
